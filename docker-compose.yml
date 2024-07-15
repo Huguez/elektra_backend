@@ -1,0 +1,27 @@
+
+services:
+  elektraDB:
+    image: mongo:8.0.0-rc4
+    container_name: elektraDB
+    ports:
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
+    volumes:
+      - elektraDB_data:/data/db
+    networks:
+      - elektraDB_network
+  elektraDB-client:
+    image: mongo-express:1.0.2-20
+    container_name: elektraDB-client
+    depends_on:
+      - elektraDB
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=elektraDB
+      - ME_CONFIG_MONGODB_PORT=${MONGODB_PORT}
+    ports:
+      - 8081:8081
+    networks:
+      - elektraDB_network
+volumes:
+  elektraDB_data:
+networks:
+  elektraDB_network:

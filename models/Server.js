@@ -1,5 +1,7 @@
 const express = require("express")
 const cors = require("cors")
+const userRoutes = require("../Routes/users")
+const {dbConection} = require("../db/config")
 
 class Server {
    
@@ -19,10 +21,11 @@ class Server {
    }
 
    async connectDB(){
-
+      await dbConection()
    }
 
    routes(){
+      this.app.use( this.apiPath["users"], userRoutes ) 
    }
 
    middlewares(){
@@ -36,7 +39,6 @@ class Server {
    start(){
       this.app.listen( this.port, () => {
          console.log( `servidor corriendo en http://localhost:${ this.port }/` )
-
       } )
    }
 }
